@@ -107,9 +107,11 @@ app.post('/parse', async (req, res) => {
 
   try {
     const { base64, fileName, mimeType, password, fileKind } = req.body
-    if (!base64) return res.status(400).json({ error: 'No file data' })
 
-    log(`Received: ${fileName}, kind=${fileKind}, size=${base64.length}`)
+    log(`Received: fileName=${fileName}, kind=${fileKind}, base64Length=${base64?.length}, hasPassword=${!!password}`)
+
+    if (!base64) return res.status(400).json({ error: 'No file data' })
+    if (!fileKind) return res.status(400).json({ error: 'No fileKind' })
 
     const buffer = Buffer.from(base64, 'base64')
     let claudeContent = []
